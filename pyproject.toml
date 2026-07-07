@@ -1,0 +1,12 @@
+[project]
+name = "researchai"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.139.0",
+    "fastmcp>=3.4.3",
+    "mcp>=1.28.1",
+    "notebooklm-py[browser,mcp]>=0.7.3",
+    "uvicorn>=0.50.2",
+]
