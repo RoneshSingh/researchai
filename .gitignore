@@ -15,6 +15,7 @@ frontend/dist/
 .env.local
 
 # IDE / System
+.vercel/
 .vscode/
 .idea/
 .DS_Store
