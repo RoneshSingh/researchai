@@ -44,7 +44,10 @@ export default function NotebookChat({ activeNotebook }) {
     setActiveCitation(null);
 
     try {
-      const response = await axios.post(`http://localhost:8000/api/notebooks/${activeNotebook.id}/query`, {
+      const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8000"
+        : "";
+      const response = await axios.post(`${API_BASE}/api/notebooks/${activeNotebook.id}/query`, {
         question: input,
       });
 

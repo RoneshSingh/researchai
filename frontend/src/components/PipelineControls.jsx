@@ -12,7 +12,10 @@ export default function PipelineControls({ activeNotebook }) {
     if (!activeNotebook) return;
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/notebooks/${activeNotebook.id}/artifacts`);
+      const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8000"
+        : "";
+      const response = await axios.get(`${API_BASE}/api/notebooks/${activeNotebook.id}/artifacts`);
       setArtifacts(response.data);
     } catch (error) {
       console.error("Error fetching artifacts:", error);
@@ -37,8 +40,11 @@ export default function PipelineControls({ activeNotebook }) {
 
     const interval = setInterval(async () => {
       try {
+        const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+          ? "http://localhost:8000"
+          : "";
         const response = await axios.get(
-          `http://localhost:8000/api/notebooks/${activeNotebook.id}/tasks/${taskInfo.task_id}`
+          `${API_BASE}/api/notebooks/${activeNotebook.id}/tasks/${taskInfo.task_id}`
         );
         const data = response.data;
         
@@ -68,7 +74,10 @@ export default function PipelineControls({ activeNotebook }) {
     setGenerating(true);
     setTaskInfo(null);
     try {
-      const response = await axios.post(`http://localhost:8000/api/notebooks/${activeNotebook.id}/podcast`, {
+      const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8000"
+        : "";
+      const response = await axios.post(`${API_BASE}/api/notebooks/${activeNotebook.id}/podcast`, {
         language: "en",
       });
       setTaskInfo(response.data);

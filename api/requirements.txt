@@ -1,0 +1,5 @@
+notebooklm-py
+fastapi
+uvicorn
+pydantic
+httpx
