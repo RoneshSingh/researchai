@@ -35,22 +35,18 @@ def get_client():
     """Helper to retrieve the NotebookLM client.
     
     If running in a cloud/headless environment, it reads Google session cookies
-    from the NOTEBOOKLM_STORAGE_STATE_JSON environment variable and writes them
-    to a temporary file to authenticate.
+    from the NOTEBOOKLM_STORAGE_STATE_JSON or NOTEBOOKLM_AUTH_JSON environment variable.
     """
-    storage_json = os.environ.get("NOTEBOOKLM_STORAGE_STATE_JSON")
+    storage_json = os.environ.get("NOTEBOOKLM_STORAGE_STATE_JSON") or os.environ.get("NOTEBOOKLM_AUTH_JSON")
     if storage_json:
         try:
             # Validate JSON format
             json.loads(storage_json)
-            temp_dir = tempfile.gettempdir()
-            temp_path = os.path.join(temp_dir, "storage_state.json")
-            with open(temp_path, "w", encoding="utf-8") as f:
-                f.write(storage_json)
-            return NotebookLMClient.from_storage(path=temp_path)
+            # Set the environment variable that the SDK natively expects
+            os.environ["NOTEBOOKLM_AUTH_JSON"] = storage_json
+            return NotebookLMClient.from_storage()
         except Exception as e:
-            # Fall back to default location if env variable is invalid
-            pass
+            raise HTTPException(status_code=500, detail=f"Failed to initialize NotebookLM client from environment JSON: {e}")
             
     return NotebookLMClient.from_storage()
 
